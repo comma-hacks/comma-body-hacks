@@ -1,6 +1,6 @@
 #!/bin/bash
 DONGLE_FILE="$HOME/.comma-body-dongle"
-REMOTE_TOOL_URL="https://raw.githubusercontent.com/kfatehi/comma-body-hacks/master/payloads/remote-tool.sh"
+REMOTE_TOOL_URL="https://raw.githubusercontent.com/comma-hacks/comma-body-hacks/master/payloads/remote-tool.sh"
 if [ ! -t 0 ] ; then
     echo "Not an interactive shell. Cannot present you with the interface. Goodbye."
     exit 1

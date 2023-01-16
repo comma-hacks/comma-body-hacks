@@ -6,6 +6,7 @@ Let's make the comma body do more than just balance
 
 # Features
 
+- A CLI to ease accessibility from various domains (local development and server installations)
 - Auto-configure networking between the Comma device and the auxiliary computer using systemd and dnsmasq for a DHCP server.
 - Allow control of the body computer through the Comma Prime LTE service (limited to SSH. Use it to connect the body computer to new Wifi networks)
 
@@ -17,7 +18,7 @@ Let's make the comma body do more than just balance
 - The other PC has a wifi adapter
 
 
-# Install
+# CLI Install
 
 For your development machine where you want to SSH into the Comma device and auxiliary body computer.
 
@@ -25,7 +26,7 @@ Be sure that you have enabled GitHub SSH keys and this computer is one of them. 
 
 ```bash
 pushd ~
-test -d comma-body-hacks || git clone git@github.com:kfatehi/comma-body-hacks
+test -d comma-body-hacks || git clone https://github.com/comma-hacks/comma-body-hacks.git
 PROFILE=$(case "$SHELL" in 
 */bash) echo "$HOME/.bashrc" ;;
 */zsh) echo "$HOME/.zprofile" ;;

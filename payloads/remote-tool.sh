@@ -10,7 +10,15 @@ function acquire_body_ip() {
 }
 
 function run_install() {
-sudo mount -o remount,rw /
+sudo mount -o remount,rw / || { 
+  echo "Failed to remount in read-write mode. Aborting"
+  exit 1
+}
+
+if [[ ! -d /data/media ]]; then
+  echo "/data/media directory is missing! Aborting"
+  exit 1
+fi
 
 if [[ ! -d /data/media/developer/body ]]; then
   mkdir -p /data/media/developer/body
@@ -37,9 +45,11 @@ do
 done
 EOF
 
-chmod +x /data/media/developer/body/*.sh
+chmod +x /data/media/developer/body/*
 
 chown -R comma:comma /data/media/developer/body
+chown comma:comma /data/media/developer/body
+chown comma:comma /data/media/developer
 
 cat <<EOF > /etc/systemd/system/body-dnsmasq.service
 [Unit]
@@ -71,10 +81,12 @@ EOF
 systemctl daemon-reload
 systemctl enable body-dnsmasq body-eth0
 
-sudo mount -o remount,ro /
+sudo mount -o remount,ro / || {
+  echo "Failed to remount in readonly mode!"
+}
 
 systemctl restart body-dnsmasq body-eth0
-echo "Done"
+echo "Restarted body-dnsmasq and body-eth0"
 }
 
 function body_ssh() {
