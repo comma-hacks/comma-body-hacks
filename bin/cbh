@@ -1,5 +1,6 @@
 #!/bin/bash
-set -x
+DONGLE_FILE="$HOME/.comma-body-dongle"
+REMOTE_TOOL_URL="https://raw.githubusercontent.com/kfatehi/comma-body-hacks/master/payloads/remote-tool.sh"
 if [ ! -t 0 ] ; then
     echo "Not an interactive shell. Cannot present you with the interface. Goodbye."
     exit 1
@@ -11,18 +12,13 @@ case $1 in
         echo "error: please enter a dongle id."
         exit 1
     fi
-    echo $1 > $HOME/.comma-body-dongle
+    echo $1 > $DONGLE_FILE
     ;;
     *)
-    if [[ ! -f $HOME/.comma-body-dongle || "$(cat $HOME/.comma-body-dongle)" == "" ]]; then
-        echo "Please use set-dongle first or add your dongle id manually to $HOME/.comma-body-dongle"
+    if [[ ! -f $DONGLE_FILE || "$(cat $DONGLE_FILE)" == "" ]]; then
+        echo "Please use set-dongle first or add your dongle id manually to $DONGLE_FILE"
     fi
-
-    SSH_TARGET="comma@$(cat $HOME/.comma-body-dongle)"
-    
-
-    ssh -t -o ProxyCommand="ssh -W %h:%p -p %p %h@ssh.comma.ai" $SSH_TARGET tmux new-session -A -s body "sudo bash -c '. <(curl -sSL body.14.chat/install_payload.sh)'"
-    
-    # tmux new-session -A -s body
+    SSH_TARGET="comma@$(cat $DONGLE_FILE)"
+    ssh -t -o ProxyCommand="ssh -W %h:%p -p %p %h@ssh.comma.ai" $SSH_TARGET tmux new-session -A -s body "sudo bash -c '. <(curl -sSL $REMOTE_TOOL_URL)'"
     ;; 
 esac
