@@ -5,7 +5,15 @@ if [ ! -t 0 ] ; then
     echo "Not an interactive shell. Cannot present you with the interface. Goodbye."
     exit 1
 fi
+function show_usage() {
+    echo "Usage: cbh [command]"
+    echo "Commands:"
+    echo "  set-dongle [dongle id]     specify a dongle id for use by future connections"
+    echo "  connect                    connect to the Comma device via Comma Prime"
+}
 case $1 in
+    --help) show_usage ;;
+    -h) show_usage ;;
     set-dongle)
     shift
     if [[ "$1" == "" ]]; then
@@ -14,11 +22,12 @@ case $1 in
     fi
     echo $1 > $DONGLE_FILE
     ;;
-    *)
+    connect)
     if [[ ! -f $DONGLE_FILE || "$(cat $DONGLE_FILE)" == "" ]]; then
         echo "Please use set-dongle first or add your dongle id manually to $DONGLE_FILE"
     fi
     SSH_TARGET="comma@$(cat $DONGLE_FILE)"
     ssh -t -o ProxyCommand="ssh -W %h:%p -p %p %h@ssh.comma.ai" $SSH_TARGET tmux new-session -A -s body "sudo bash -c '. <(curl -sSL $REMOTE_TOOL_URL)'"
     ;; 
+    *) echo "invalid command" ; exit 1 ;;
 esac

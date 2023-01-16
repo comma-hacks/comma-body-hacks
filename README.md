@@ -45,10 +45,10 @@ popd
 cbh set-dongle <DONGLE ID>
 ```
 
-2. Run the tool to see the options.
+2. Use the `connect` command to connect to the Comma device and see a command menu.
 
 ```bash
-cbh
+cbh connect
 ```
 
 3. Choose the install option:
